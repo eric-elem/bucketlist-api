@@ -25,3 +25,21 @@ class User(DB.Model):
     def verify_password(self, password):
         """ Hashes and checks if the provided password matches that stored for the user """
         return check_password_hash(self.password, password)
+
+class Bucketlist(DB.Model):
+    """ Models the bucketlist table """
+
+    __tablename__ = 'bucketlists'
+    identity = DB.Column(DB.Integer, primary_key=True)
+    title = DB.Column(DB.String(256), unique=True)
+    user_id = DB.Column(DB.Integer, DB.ForeignKey('users.id'))
+    items = DB.relationship('Item', backref=DB.backref('bucketlist', lazy='dynamic'),
+                            lazy='dynamic')
+
+    def __init__(self, title):
+        self.title = title
+
+    def update_bucketlist(self, title):
+        """ Changes the title of a bucket to the provided title """
+        self.title = title
+    
