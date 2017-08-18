@@ -36,10 +36,29 @@ class Bucketlist(DB.Model):
     items = DB.relationship('Item', backref=DB.backref('bucketlist', lazy='dynamic'),
                             lazy='dynamic')
 
-    def __init__(self, title):
+    def __init__(self, title, user):
         self.title = title
+        self.user = user
 
     def update_bucketlist(self, title):
         """ Changes the title of a bucket to the provided title """
         self.title = title
     
+class Item(DB.Model):
+    """ Models the items table """
+
+    __tablename__ = items
+    identity = DB.Column(DB.Integer, primary_key=True)
+    description = DB.Column(DB.String(256), unique=True)
+    status = DB.Column(DB.Boolean)
+    bucketlist_id = DB.Column(DB.Integer, DB.ForeignKey('bucketlists.id'))
+
+    def __init__(self, description, bucketlist):
+        self.description = description
+        self.status = False
+        self.bucketlist = bucketlist
+
+    def update_item(self, description, status):
+        """ Modifies item """
+        self.description = description
+        self.status = status
