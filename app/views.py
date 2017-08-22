@@ -119,8 +119,8 @@ def bucketlists(the_user):
                 return generate_response('Bucketlist already exists'), 400
             return generate_response('Invalid key in JSON data'), 400
         return generate_response('Provide proper JSON data'), 400
-    if 'search' in request.args:
-        title = request.args['search']
+    if 'q' in request.args:
+        title = request.args['q']
         searched_bucket = Bucketlist.query.filter_by(title=title).first()
         if searched_bucket:
             searched_bucket_dict = {
@@ -196,7 +196,7 @@ def items(the_user, bucket_identity):
                     existing_item = Item.query.filter_by(
                         description=new_item_json['description']).first()
                     if not existing_item:
-                        new_item = existing_item(new_item_json['description'], bucket_identity)
+                        new_item = Item(new_item_json['description'], bucket_identity)
                         DB.session.add(new_item)
                         DB.session.commit()
                         return generate_response('Item created'), 200
@@ -204,8 +204,8 @@ def items(the_user, bucket_identity):
                 return generate_response('Invalid keys in JSON data'), 400
             return generate_response('Provide proper JSON data'), 400
         
-        if 'search' in request.args:
-            description = request.args['search']
+        if 'q' in request.args:
+            description = request.args['q']
             searched_item = Item.query.filter_by(description=description).first()
             if searched_item:
                 searched_item_dict = {
