@@ -6,7 +6,7 @@ import jwt
 from flask import Blueprint, request, jsonify
 from models import DB, APP, User, Bucketlist, Item, LoggedoutToken
 
-AUTH = Blueprint('auth', __name__)
+auth = Blueprint('auth', __name__)
 
 def token_required(func):
     """ Defines a decorator for views requiring token authentication """
