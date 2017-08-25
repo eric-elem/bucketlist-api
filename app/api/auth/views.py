@@ -35,7 +35,8 @@ def register():
                         db.session.commit()
                         response = {
                             'status': 'Success',
-                            'message': 'The user '+newuser.name+' has been created',
+                            'message': 'The user '+newuser.name +
+                            ' has been created',
                             'user': {
                                 'id': newuser.user_id,
                                 'name': newuser.name,
@@ -139,7 +140,7 @@ def reset_password(the_user):
                 db.session.commit()
                 response = {
                     'status': 'Error',
-                    'message': 'Your password has been updated ' + 
+                    'message': 'Your password has been updated ' +
                     the_user.name
                 }
                 return jsonify(response), 200
@@ -155,7 +156,8 @@ def reset_password(the_user):
         return jsonify(response), 200
     response = {
         'status': 'Error',
-        'message': "Please provide all attributes 'password', 'new_password', " +
+        'message': "Please provide all attributes 'password', " +
+        "'new_password', " +
         "and 'new_password_rpt'"
     }
     return jsonify(response), 400

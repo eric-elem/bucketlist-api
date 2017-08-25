@@ -1,4 +1,4 @@
-from test_base import TestBase, db, Bucketlist
+from .test_base import TestBase, db, Bucketlist
 import unittest
 from flask import json
 
@@ -11,7 +11,6 @@ class TestItems(TestBase):
         response = self.create_valid_bucket()
         data = json.loads(response.data.decode())
         self.bucketlist_id = str(data['bucketlist']['id'])
-
 
     def test_accessing_items_view_without_token(self):
         """ Tests accessing the items endpoint without a token """

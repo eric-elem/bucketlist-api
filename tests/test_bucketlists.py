@@ -1,4 +1,4 @@
-from test_base import TestBase, db, Bucketlist
+from .test_base import TestBase, db, Bucketlist
 import unittest
 from flask import json
 
