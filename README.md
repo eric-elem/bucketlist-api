@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/eric-elem/bucketlist-api.svg?branch=develop)](https://travis-ci.org/eric-elem/bucketlist-api)
-
 [![Coverage Status](https://coveralls.io/repos/github/eric-elem/bucketlist-api/badge.svg?branch=develop)](https://coveralls.io/github/eric-elem/bucketlist-api?branch=develop)
 
 # bucketlist-api
