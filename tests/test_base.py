@@ -54,7 +54,7 @@ class TestBase(unittest.TestCase):
         self.create_valid_user()
 
     def create_valid_user(self):
-        response = self.client.post('/auth/register', 
+        response = self.client.post('/auth/register',
                                     data=json.dumps(self.valid_user),
                                     content_type='application/json')
         return response
