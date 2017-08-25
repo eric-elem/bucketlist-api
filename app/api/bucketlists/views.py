@@ -5,32 +5,38 @@ from app.models import Bucketlist, Item, db
 bucketlists = Blueprint('bucketlists', __name__)
 
 
-@bucketlists.route('/', methods=['POST', 'GET'])
+@bucketlists.route('', methods=['POST', 'GET'])
 @token_required
 def bucketlists_view(the_user):
     """ Creates a bucketlist """
     if request.method == 'POST':
         new_bucketlist_json = get_json_input()
         if 'title' in new_bucketlist_json and 'description' in new_bucketlist_json:
-            existing_bucketlist = Bucketlist.query.filter_by(title=new_bucketlist_json['title']).first()
-            if not existing_bucketlist:
-                a_bucketlist = Bucketlist(new_bucketlist_json['title'], new_bucketlist_json['description'], the_user.user_id)
-                db.session.add(a_bucketlist)
-                db.session.commit()
-                response = {
-                    'status' : 'Success',
-                    'message' : 'Bucketlist ' + a_bucketlist.title + ' has been created',
-                    'bucketlist' : {
-                        'id' : a_bucketlist.bucketlist_id,
-                        'title' : a_bucketlist.title,
-                        'description' : a_bucketlist.description,
-                        'created_at' : a_bucketlist.created_at
+            if len(new_bucketlist_json['title']) and len(new_bucketlist_json['description']):
+                existing_bucketlist = Bucketlist.query.filter_by(title=new_bucketlist_json['title']).first()
+                if not existing_bucketlist:
+                    a_bucketlist = Bucketlist(new_bucketlist_json['title'], new_bucketlist_json['description'], the_user.user_id)
+                    db.session.add(a_bucketlist)
+                    db.session.commit()
+                    response = {
+                        'status' : 'Success',
+                        'message' : 'Bucketlist ' + a_bucketlist.title + ' has been created',
+                        'bucketlist' : {
+                            'id' : a_bucketlist.bucketlist_id,
+                            'title' : a_bucketlist.title,
+                            'description' : a_bucketlist.description,
+                            'created_at' : a_bucketlist.created_at
+                        }
                     }
+                    return jsonify(response), 201
+                response = {
+                    'status' : 'Error',
+                    'message' : 'A bucketlist with the title ' + new_bucketlist_json['title'] + ' already exists'
                 }
-                return jsonify(response), 201
+                return jsonify(response), 400
             response = {
                 'status' : 'Error',
-                'message' : 'A bucketlist with the title ' + new_bucketlist_json['title'] + ' already exists'
+                'message' : 'Bucketlist title and/or description cannot be blank'
             }
             return jsonify(response), 400
         response = {
@@ -124,16 +130,16 @@ def bucketlist(the_user, identity):
             return jsonify(response), 200
         elif request.method == 'PUT':
             update_bucketlist_json = get_json_input()
-            if 'new_title' in update_bucketlist_json or 'new_description' in update_bucketlist_json:
-                if 'new_title' in update_bucketlist_json:
-                    the_bucketlist.title = update_bucketlist_json['new_title']
-                if 'new_description' in update_bucketlist_json:
-                    the_bucketlist.description = update_bucketlist_json['new_description']
+            if 'title' in update_bucketlist_json or 'description' in update_bucketlist_json:
+                if 'title' in update_bucketlist_json:
+                    the_bucketlist.title = update_bucketlist_json['title']
+                if 'description' in update_bucketlist_json:
+                    the_bucketlist.description = update_bucketlist_json['description']
                 db.session.commit()
                 response = {
                     'status' : 'Success',
                     'message' : 'Bucketlist has been updated',
-                    'bucket' : {
+                    'bucketlist' : {
                         'id' : the_bucketlist.bucketlist_id,
                         'title' : the_bucketlist.title,
                         'description' : the_bucketlist.description,
@@ -144,7 +150,7 @@ def bucketlist(the_user, identity):
                 return jsonify(response), 200
             response = {
                 'status' : 'Error',
-                'message' : "Please provide a 'new_title' and/or 'new_description' for the bucketlist"
+                'message' : "Please provide a 'title' and/or 'description' for the bucketlist"
             }
             return jsonify(response), 400
         else:
@@ -170,28 +176,34 @@ def items(the_user, bucket_identity):
         if request.method == 'POST':
             new_item_json = get_json_input()
             if 'title' in new_item_json and 'description' in new_item_json:
-                existing_item = Item.query.filter_by(
-                    title=new_item_json['title']).first()
-                if not existing_item:
-                    new_item = Item(new_item_json['title'], new_item_json['description'], bucket_identity)
-                    db.session.add(new_item)
-                    db.session.commit()
-                    response = {
-                        'status' : 'Success',
-                        'message' : 'Item has been created',
-                        'item' : {
-                            'id' : new_item.item_id,
-                            'title' : new_item.title,
-                            'description' : new_item.description,
-                            'created_at' : new_item.created_at
+                if len(new_item_json['title']) or len(new_item_json['description']):
+                    existing_item = Item.query.filter_by(
+                        title=new_item_json['title']).first()
+                    if not existing_item:
+                        new_item = Item(new_item_json['title'], new_item_json['description'], bucket_identity)
+                        db.session.add(new_item)
+                        db.session.commit()
+                        response = {
+                            'status' : 'Success',
+                            'message' : 'Item has been created',
+                            'item' : {
+                                'id' : new_item.item_id,
+                                'title' : new_item.title,
+                                'description' : new_item.description,
+                                'created_at' : new_item.created_at
+                            }
                         }
+                        return jsonify(response), 201
+                    response = {
+                        'status' : 'Error',
+                        'message' : 'An item with the title ' + existing_item.title + ' already exists'
                     }
-                    return jsonify(response), 200
+                    return jsonify(response), 404
                 response = {
                     'status' : 'Error',
-                    'message' : 'An item with the title ' + existing_item.title + ' already exists'
+                    'message' : 'Item title and/or description cannot be blank'
                 }
-                return jsonify(response), 404
+                return jsonify(response), 400
             response = {
                 'status' : 'Error',
                 'message' : 'Please provide a title and description for the new item'
@@ -268,7 +280,7 @@ def items(the_user, bucket_identity):
     }
     return jsonify(response), 404
 
-@bucketlists.route('/<bucket_identity>/items/<item_id>', methods=['PUT', 'DELETE'])
+@bucketlists.route('/<bucket_identity>/items/<item_id>', methods=['GET', 'PUT', 'DELETE'])
 @token_required
 def item(the_user, bucket_identity, item_id):
     """ Updates or deletes an Item """
@@ -278,11 +290,11 @@ def item(the_user, bucket_identity, item_id):
         if cur_item:
             if request.method == 'PUT':
                 updt_item_json = get_json_input()
-                if 'new_title' in updt_item_json or 'new_description' in updt_item_json or 'new_status' in updt_item_json:
-                    if 'new_title' in updt_item_json:
-                        cur_item.title = updt_item_json['new_title']
-                    if 'new_description' in updt_item_json:
-                        cur_item.description = updt_item_json['new_description']
+                if 'title' in updt_item_json or 'description' in updt_item_json or 'new_status' in updt_item_json:
+                    if 'title' in updt_item_json:
+                        cur_item.title = updt_item_json['title']
+                    if 'description' in updt_item_json:
+                        cur_item.description = updt_item_json['description']
                     if 'new_status' in updt_item_json:
                         cur_item.status = updt_item_json['new_status']
                     db.session.commit()
