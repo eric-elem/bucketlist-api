@@ -161,12 +161,3 @@ def reset_password(the_user):
         "and 'new_password_rpt'"
     }
     return jsonify(response), 400
-
-
-@auth.errorhandler(404)
-def handle_error_404(error):
-    response = {
-        'status': 'Error',
-        'message': 'Request not found'
-    }
-    return jsonify(response), 404
