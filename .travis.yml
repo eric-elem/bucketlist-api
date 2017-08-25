@@ -6,7 +6,7 @@ cache: pip
 services:
   - postgresql
 env:
-  #- SECRET_KEY = '254HHSY18836'
+  - SECRET_KEY = '254HHSY18836'
   - TEST_DB_URL=postgresql://postgres:localhost/bucketlisttestdb
 before_script:
   - psql -c 'create database bucketlisttestdb;' -U postgres
