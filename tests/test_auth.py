@@ -1,4 +1,4 @@
-from .test_base import TestBase, db, User
+from test_base import TestBase, db, User
 import unittest
 from flask import json
 
