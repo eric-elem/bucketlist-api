@@ -1,10 +1,8 @@
-""" APIs main module """
-
-from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
-from views import APP, DB
+from app import create_app
+from flask_migrate import MigrateCommand
 
-MIGRATE = Migrate(APP, DB)
+APP = create_app('TESTING')
 MANAGER = Manager(APP)
 MANAGER.add_command('db', MigrateCommand)
 
