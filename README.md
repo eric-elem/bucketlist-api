@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/eric-elem/bucketlist-api.svg?branch=develop)](https://travis-ci.org/eric-elem/bucketlist-api)
+
 # bucketlist-api
 
 # Description
