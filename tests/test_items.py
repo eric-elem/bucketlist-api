@@ -7,6 +7,7 @@ class TestItems(TestBase):
     """ Defines tests for the view methods of items """
 
     def setUp(self):
+        db.create_all()
         self.create_valid_user()
         response = self.create_valid_bucket()
         data = json.loads(response.data.decode())
@@ -206,6 +207,8 @@ class TestItems(TestBase):
     def tearDown(self):
         self.delete_valid_item()
         self.delete_valid_user()
+        db.session.remove()
+        db.drop_all()
 
 if __name__ == '__main__':
     unittest.main()

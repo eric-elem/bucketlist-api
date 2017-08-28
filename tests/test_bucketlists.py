@@ -7,6 +7,7 @@ class TestBucketlist(TestBase):
     """ Defines tests for the view methods of bucketlists """
 
     def setUp(self):
+        db.create_all()
         self.create_valid_user()
 
     def test_accessing_bucketlist_view_without_token(self):
@@ -189,6 +190,8 @@ class TestBucketlist(TestBase):
 
     def tearDown(self):
         self.delete_valid_user()
+        db.session.remove()
+        db.drop_all()
 
 if __name__ == '__main__':
     unittest.main()

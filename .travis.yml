@@ -6,13 +6,13 @@ cache: pip
 services:
   - postgresql
 env:
-  - TEST_DB_URL = postgresql://localhost/bucketlisttestdb
+  
 before_script:
   - psql -c 'create database bucketlisttestdb;' -U postgres
 install:
   - pip install -r requirements.txt
   - pip install coveralls
 script:
-  - pytest
+  - nosetests --with-coverage --cover-package=app.api
 
 after_success: coveralls

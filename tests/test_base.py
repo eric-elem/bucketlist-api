@@ -51,6 +51,7 @@ class TestBase(unittest.TestCase):
     }
 
     def setUp(self):
+        db.create_all()
         self.create_valid_user()
 
     def create_valid_user(self):
@@ -103,3 +104,5 @@ class TestBase(unittest.TestCase):
 
     def tearDown(self):
         self.delete_valid_user()
+        db.session.remove()
+        db.drop_all()
