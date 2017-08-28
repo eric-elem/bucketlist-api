@@ -6,6 +6,9 @@
 # Description
 Bucketlist-api is a RESTFul web api that let's users create accounts, login and create, view, edit and delete bucketlists and items.
 
+# Documentation
+The API documentation can be found at http://docs.bucketlistapi11.apiary.io/#
+
 # Installation
 
 Create a new directory and initialize git in it. Clone this repository by running
@@ -33,3 +36,6 @@ Start the application by running
 $ python manage.py runserver
 ```
 Test your setup using a client app like postman
+
+# Demo
+The API demo is deployed on heroku at https://erics-bucketlist-api.herokuapp.com/ and can be tested too with a client app like postman
