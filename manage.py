@@ -2,7 +2,7 @@ from flask_script import Manager
 from app import create_app
 from flask_migrate import MigrateCommand
 
-APP = create_app('TESTING')
+APP = create_app('DEVELOPMENT')
 MANAGER = Manager(APP)
 MANAGER.add_command('db', MigrateCommand)
 

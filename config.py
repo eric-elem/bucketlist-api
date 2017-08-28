@@ -13,7 +13,7 @@ class TestingConfiguration(BaseConfiguration):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DevelopmentConfiguration(BaseConfiguration):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DB_URL')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
 class ProductionConfiguration(BaseConfiguration):
