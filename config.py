@@ -8,11 +8,9 @@ class BaseConfiguration:
 
 
 class TestingConfiguration(BaseConfiguration):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DB_URL')
-    """ SQLALCHEMY_DATABASE_URI =
-        'postgresql://postgres:H0m3b0yz!@localhost/bucketlisttestdb'
-    """
-
+    #SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DB_URL')
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2:///bucketlisttestdb'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DevelopmentConfiguration(BaseConfiguration):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DB_URL')

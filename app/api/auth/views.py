@@ -12,46 +12,55 @@ auth = Blueprint('auth', __name__)
 @auth.route('/register', methods=['POST'])
 def register():
     """ Creates an account for a new user """
-    new_user = get_json_input()
-    if 'name' in new_user and 'username' in new_user and 'password'\
-            in new_user and 'password_rpt' in new_user:
-        try:
-            int(new_user['username'])
-            response = {
-                'status': 'Error',
-                'message': 'Username should not consist of numbers only'
-            }
-            return jsonify(response), 400
-        except ValueError:
-            if new_user['password'] == new_user['password_rpt']:
-                user = User.query.filter_by(username=new_user['username'])\
-                    .first()
-                if not user:
-                    user = User(new_user['username'], new_user['password'],
-                                new_user['name'])
-                    db.session.add(user)
-                    db.session.commit()
-                    response = {
-                        'status': 'Success',
-                        'message': 'The user '+user.name+' has been created',
-                        'user': {
-                            'id': user.user_id,
-                            'name': user.name,
-                            'username': user.username,
-                            'created_at': user.created_at
-                        }
-                    }
-                    return jsonify(response), 201
+    data = get_json_input()
+    if 'name' in data and 'username' in data and 'password'\
+            in data and 'password_rpt' in data:
+        if len(data['name']) or len(data['username']) or len(data['password'])\
+                or len(data['password']) or len(data['password_rpt']):
+            try:
+                int(data['username'])
                 response = {
                     'status': 'Error',
-                    'message': 'A user with the username ' +
-                    new_user['username'] + ' already exists'
+                    'message': 'Username should not consist of numbers only'
                 }
-                return jsonify(response), 202
+                return jsonify(response), 400
+            except:
+                if data['password'] == data['password_rpt']:
+                    user = User.query.filter_by(username=data['username'])\
+                        .first()
+                    if not user:
+                        newuser = User(data['username'], data['password'],
+                                       data['name'])
+                        db.session.add(newuser)
+                        db.session.commit()
+                        response = {
+                            'status': 'Success',
+                            'message': 'The user '+newuser.name +
+                            ' has been created',
+                            'user': {
+                                'id': newuser.user_id,
+                                'name': newuser.name,
+                                'username': newuser.username,
+                                'created_at': newuser.created_at
+                            }
+                        }
+                        return jsonify(response), 201
+                    response = {
+                        'status': 'Error',
+                        'message': 'A user with the username ' +
+                        data['username'] + ' already exists'
+                    }
+                    return jsonify(response), 202
+                response = {
+                    'status': 'Error',
+                    'message': "The provided passwords 'password' and " +
+                    "'password_rpt' must match"
+                }
+                return jsonify(response), 400
             response = {
                 'status': 'Error',
-                'message': "The provided passwords 'password' and " +
-                "'password_rpt' must match"
+                'message': "Attributes name, username, " +
+                "password, and/or password_rpt cannot be blank"
             }
             return jsonify(response), 400
     response = {
@@ -119,19 +128,19 @@ def logout(the_user):
 @token_required
 def reset_password(the_user):
     """ Updates users password """
-    new_user_details = get_json_input()
-    if ('password' in new_user_details and
-            'new_password' in new_user_details and
-            'new_password_rpt' in new_user_details):
-        if the_user.verify_password(new_user_details['password']):
-            if new_user_details['new_password'] == \
-                    new_user_details['new_password_rpt']:
-                the_user.set_password(new_user_details['new_password'])
+    user = get_json_input()
+    if ('password' in user and
+            'new_password' in user and
+            'new_password_rpt' in user):
+        if the_user.verify_password(user['password']):
+            if user['new_password'] == \
+                    user['new_password_rpt']:
+                the_user.set_password(user['new_password'])
                 db.session.add(the_user)
                 db.session.commit()
                 response = {
                     'status': 'Error',
-                    'message': 'Your password has been updated ' + 
+                    'message': 'Your password has been updated ' +
                     the_user.name
                 }
                 return jsonify(response), 200
@@ -147,16 +156,8 @@ def reset_password(the_user):
         return jsonify(response), 200
     response = {
         'status': 'Error',
-        'message': "Please provide all attributes 'password', 'new_password', " +
+        'message': "Please provide all attributes 'password', " +
+        "'new_password', " +
         "and 'new_password_rpt'"
     }
     return jsonify(response), 400
-
-
-@auth.errorhandler(404)
-def handle_error_404(error):
-    response = {
-        'status': 'Error',
-        'message': 'Request not found'
-    }
-    return jsonify(response), 404

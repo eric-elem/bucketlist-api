@@ -14,7 +14,8 @@ def token_required(func):
             if LoggedoutToken.query.filter_by(token=received_token).first():
                 response = {
                     'status': 'Error',
-                    'message': 'Your token is expired. Please login to get a new token.'
+                    'message': 'Your token is expired. Please login to ' +
+                    'get a new token.'
                 }
                 return jsonify(response), 401
             else:
@@ -53,7 +54,8 @@ def token_required(func):
 
 def get_json_input():
     """ Converts user input into a JSON object """
-    # silent attribute ensures None is returned and no exception is thrown if get_json fails
+    """ silent attribute ensures None is returned and no exception
+    is thrown if get_json fails """
     input_json_data = request.get_json(silent=True)
     if input_json_data:
         return input_json_data

@@ -1,27 +1,35 @@
+[![Build Status](https://travis-ci.org/eric-elem/bucketlist-api.svg?branch=develop)](https://travis-ci.org/eric-elem/bucketlist-api)
+[![Coverage Status](https://coveralls.io/repos/github/eric-elem/bucketlist-api/badge.svg?branch=develop)](https://coveralls.io/github/eric-elem/bucketlist-api?branch=develop)
+
 # bucketlist-api
 
-Description
-Bucketlist-api is a RESTFul web api that let's users create accounts, login and create, view, edit and delete bucketlists
-and items.
+# Description
+Bucketlist-api is a RESTFul web api that let's users create accounts, login and create, view, edit and delete bucketlists and items.
 
-Installation
+# Installation
 
 Create a new directory and initialize git in it. Clone this repository by running
-    git clone https://
-
+```sh
+$ git clone https://github.com/eric-elem/bucketlist-api.git
+```
 Create a virtual environment. For example, with virtualenv, create a virtual environment named env using
-    virtualenv env
-
+```sh
+$ virtualenv env
+```
 Activate the virtual environment
-    source env/bin/activate
-
+```sh
+$ source env/bin/activate
+```
 Install the dependencies in the requirements.txt file using pip
-    pip install -r requirements.txt
-
+```sh
+$ pip install -r requirements.txt
+```
 Setup a database that the api will use and set the uri as an environment variable. For postgres on mac, use
-    export DB_URL='postgresql://dbusername:dbpassword@localhost/dbname'
-
+```sh
+$ export DB_URL='postgresql://dbusername:dbpassword@localhost/dbname'
+```
 Start the application by running
-    python manage.py runserver
-
-Test your setup a client app like postman
+```sh
+$ python manage.py runserver
+```
+Test your setup using a client app like postman
