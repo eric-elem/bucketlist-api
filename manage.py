@@ -6,7 +6,7 @@ APP = create_app('DEVELOPMENT')
 MANAGER = Manager(APP)
 MANAGER.add_command('db', MigrateCommand)
 
-@manager.command
+@MANAGER.command
 def create_db():
     db.drop_all()
     db.create_all()
